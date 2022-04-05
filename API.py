@@ -5,19 +5,13 @@
 @author: Abdelrahman Ragab
 """
 
-from flask import Flask, json, request, jsonify
+from flask import Flask, request, jsonify
 import os
-
-
 from werkzeug.utils import secure_filename
 import warnings
 warnings.filterwarnings('ignore')
-
 import numpy as np
 import cv2
-import numpy as np
-import os
-import imutils
 from keras.models import load_model
  
 app = Flask(__name__)
@@ -100,11 +94,14 @@ def upload_file():
      
     errors = {}
     success = False
-     
+    classNo = None
+    
     for file in files:      
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+            classNo = faceMaskDetection(file_path)
             success = True
         else:
             errors[file.filename] = "File type isn't allowed"
@@ -115,8 +112,8 @@ def upload_file():
         resp.status_code = 500
         return resp
     if success:
-       #resp = jsonify({'message' : 'Files successfully uploaded', 'Class' : str(classNo) })
-        resp = jsonify({'message' : 'Files successfully uploaded'})
+        resp = jsonify({'message' : 'Files successfully uploaded', 'Class' : str(classNo) })
+        # resp = jsonify({'message' : 'Files successfully uploaded'})
 
         resp.status_code = 201
         return resp
