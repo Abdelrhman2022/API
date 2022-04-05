@@ -22,7 +22,7 @@ UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
  
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 
 def preprocessing(img):
@@ -85,26 +85,22 @@ def main():
 @app.route('/upload', methods=['POST'])
 def upload_file():
     # check if the post request has the file part
-    if 'files[]' not in request.files:
-        resp = jsonify({'message' : 'No file part in the request submitted'})
-        resp.status_code = 400
-        return resp
+
  
-    files = request.files.getlist('files[]')
-     
+    file = request.files['imagefile']
     errors = {}
     success = False
     classNo = None
     
-    for file in files:      
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
-            classNo = faceMaskDetection(file_path)
-            success = True
-        else:
-            errors[file.filename] = "File type isn't allowed"
+          
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        classNo = faceMaskDetection(file_path)
+        success = True
+    else:
+        errors[file.filename] = "File type isn't allowed"
  
     if success and errors:
         errors['message'] = 'File(s) successfully uploaded'
