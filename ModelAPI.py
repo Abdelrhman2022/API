@@ -109,7 +109,11 @@ def main():
 def upload_file():
     # check if the post request has the file part
 
- 
+    if 'imagefile' not in request.files:
+        resp = jsonify(
+            {'message' : 'No file exists'})
+        return resp
+            
     file = request.files['imagefile']
     errors = {}
     success = False
@@ -124,7 +128,7 @@ def upload_file():
         className = get_className(classNo)
         success = True
     else:
-        errors[file.filename] = "File type isn't allowed"
+        errors["error"] = "File type isn't allowed"
  
 
     if success:
