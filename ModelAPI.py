@@ -64,7 +64,7 @@ def get_predictions(img_path):
     
      image = keras.preprocessing.image.load_img(img_path, target_size=(224, 224, 3))
      image_array = keras.preprocessing.image.img_to_array(image)
-     os.remove(img_path)
+     
      img = crop_image_from_gray(image_array)
      img = load_ben_color(img)
 
@@ -77,7 +77,7 @@ def get_predictions(img_path):
 def get_className(classNo):
     """
     Input: pridection result 0-> Normal , 1-> Mild
-    2-> Modrate (No DR), 3-> severe, 4-> Proliferative 
+    2-> Modrate, 3-> severe, 4-> Proliferative 
     """
     if classNo==0:
         return "Normal (No DR)"
@@ -89,7 +89,6 @@ def get_className(classNo):
         return "severe"
     elif classNo==4:
         return "Proliferative DR"
-
 
 
 @app.route("/shutdown", methods=['GET'])
@@ -104,7 +103,10 @@ def shutdown():
 @app.route('/')
 def main():
     return 'Hellow world'
- 
+
+
+
+    
 @app.route('/upload', methods=['POST'])
 def upload_file():
     # check if the post request has the file part
@@ -121,6 +123,7 @@ def upload_file():
     success = False
     classNo = None
     className = None
+    file_path = None
           
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -129,8 +132,9 @@ def upload_file():
         classNo = get_predictions(file_path)
         className = get_className(classNo)
         success = True
+        #os.remove(file_path)
     else:
-        errors["error"] = "File type isn't allowed"
+        errors["message"] = "File type isn't allowed"
         errors["id"] = "-2"
  
 
@@ -140,6 +144,7 @@ def upload_file():
              'ClassNo' : str(classNo),
              "ClassName" : className
              })
+        
 
         resp.status_code = 201
         return resp
@@ -147,6 +152,10 @@ def upload_file():
         resp = jsonify(errors)
         resp.status_code = 500
         return resp
+    
+    @app.after_request
+    def delete(resp):
+        os.remove(file_path)
  
 if __name__ == '__main__':
     app.run(debug=True, use_reloader = False, port=(5000))
