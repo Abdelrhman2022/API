@@ -22,7 +22,7 @@ app.secret_key = "caircocoders-ednalan"
  
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 15 * 1024 * 1024
  
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
@@ -111,7 +111,9 @@ def upload_file():
 
     if 'imagefile' not in request.files:
         resp = jsonify(
-            {'message' : 'No file exists'})
+            {'message' : 'No file exists',
+             'id' : '-1'
+             })
         return resp
             
     file = request.files['imagefile']
@@ -129,11 +131,12 @@ def upload_file():
         success = True
     else:
         errors["error"] = "File type isn't allowed"
+        errors["id"] = "-2"
  
 
     if success:
         resp = jsonify(
-            {'message' : 'Files successfully uploaded',
+            {'message' : 'Image successfully uploaded',
              'ClassNo' : str(classNo),
              "ClassName" : className
              })
@@ -146,4 +149,4 @@ def upload_file():
         return resp
  
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, use_reloader = False, port=(5000))
