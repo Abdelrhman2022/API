@@ -76,8 +76,8 @@ def get_predictions(img_path):
  
 def get_className(classNo):
     """
-    Input: pridection result 0-> Mask Found, 1-> Mask Not Found
-    Return Text Message
+    Input: pridection result 0-> Normal , 1-> Mild
+    2-> Modrate (No DR), 3-> severe, 4-> Proliferative 
     """
     if classNo==0:
         return "Normal (No DR)"
