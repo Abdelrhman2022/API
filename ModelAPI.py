@@ -25,7 +25,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
  
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-
+model = keras.models.load_model(r'A:\FCAI-HU\ML\API\FinalRetinopathyModel.h5')
  
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -78,9 +78,15 @@ def get_className(classNo):
     Return Text Message
     """
     if classNo==0:
-        return " Mask is Up"
+        return "Normal (No DR)"
     elif classNo==1:
-        return " Warning No Mask!"
+        return "Mild"
+    elif classNo==2:
+        return "Modrate"
+    elif classNo==3:
+        return "severe"
+    elif classNo==4:
+        return "Proliferative DR"
 
 
 
@@ -106,20 +112,26 @@ def upload_file():
     errors = {}
     success = False
     classNo = None
-    
+    className = None
           
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
         classNo = get_predictions(file_path)
+        os.remove(file_path)
+        className = get_className(classNo)
         success = True
     else:
         errors[file.filename] = "File type isn't allowed"
  
 
     if success:
-        resp = jsonify({'message' : 'Files successfully uploaded', 'Class' : str(classNo) })
+        resp = jsonify(
+            {'message' : 'Files successfully uploaded',
+             'ClassNo' : str(classNo),
+             "ClassName" : className
+             })
 
         resp.status_code = 201
         return resp
