@@ -5,7 +5,8 @@ Created on Fri Apr  8 00:57:33 2022
 @author: Abdelrahman Ragab
 """
 import keras
-import efficientnet.tfkeras as efn  
+import efficientnet.tfkeras as efn
+import tensorflow as tf
 import numpy as np
 import cv2
 from flask import Flask, request, jsonify
@@ -61,14 +62,15 @@ def crop_image_from_gray(img,tol=7):
 
 def get_predictions(img_path):
     
-     image = keras.preprocessing.image.load_img(img_path, target_size=(224, 224, 1))
+     image = keras.preprocessing.image.load_img(img_path, target_size=(224, 224, 3))
      image_array = keras.preprocessing.image.img_to_array(image)
+     os.remove(img_path)
      img = crop_image_from_gray(image_array)
      img = load_ben_color(img)
-     img = img.reshape(1,224,224,3)
+
+     image = tf.keras.preprocessing.image.smart_resize(img, (224,224))
+     img = image.reshape(1,224,224,3)
      img = np.float32(img) / 255.0
-     model = keras.models.load_model(r'A:\FCAI-HU\ML\API\FinalRetinopathyModel.h5')
-      
      pred = model.predict(img)
      return np.argmax(pred)
  
@@ -119,7 +121,6 @@ def upload_file():
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
         classNo = get_predictions(file_path)
-        os.remove(file_path)
         className = get_className(classNo)
         success = True
     else:
