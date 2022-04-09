@@ -24,7 +24,7 @@ app.config['MAX_CONTENT_LENGTH'] = 15 * 1024 * 1024
  
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-model = keras.models.load_model(r'A:\FCAI-HU\ML\API\FinalRetinopathyModel.h5')
+model = keras.models.load_model(r'.\FinalRetinopathyModel.h5')
  
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -156,4 +156,4 @@ def upload_file():
         os.remove(file_path)
  
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader = False, port=(5000))
+    app.run(debug=False, host = '0,0,0,0')
