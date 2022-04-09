@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # -*- coding: utf-8 -*-
 """
 Created on Fri Apr  8 00:57:33 2022
@@ -103,7 +104,6 @@ def main():
     return 'Hello world'
 
 
-
     
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -157,3 +157,5 @@ def upload_file():
  
 if __name__ == '__main__':
     app.run(debug=False, host = '0,0,0,0')
+
+
