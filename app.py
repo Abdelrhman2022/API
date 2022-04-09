@@ -102,7 +102,7 @@ def shutdown():
  
 @app.route('/')
 def main():
-    return 'Hellow world'
+    return 'Hello world'
 
 
 
