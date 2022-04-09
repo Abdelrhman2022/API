@@ -12,8 +12,6 @@ import cv2
 from flask import Flask, request, jsonify
 import os
 from werkzeug.utils import secure_filename
-import warnings
-warnings.filterwarnings('ignore')
 
  
 app = Flask(__name__)
