@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Apr  8 00:57:33 2022
-
-@author: Abdelrahman Ragab
-"""
+import gunicorn
 import keras
 import efficientnet.tfkeras as efn
 import tensorflow as tf
