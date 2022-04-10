@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{url_for('static', filename ='CSS/Style.css')}}">
+    <title>Index</title>
+</head>
+
+<body>
+    <h1 class="text-center">Image Classifier</h1>
+
+    <form action='/' method="post" enctype="multipart/form-data">
+        <div class="file-upload">
+            <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Upload
+                Image
+            </button>
+
+            <div class="image-upload-wrap">
+                <input class="file-upload-input" type='file' name="imagefile" onchange="readURL(this);"
+                    accept="image/*" />
+                <div class="drag-text">
+                    <h3>Drag and drop a file or select add Image</h3>
+                </div>
+            </div>
+
+
+            <div class="file-upload-content">
+                <img class="file-upload-image" src="#" alt="your image" />
+                <div class="image-title-wrap">
+                    <button type="button" onclick="removeUpload()" class="remove-image">Remove <span
+                            class="image-title">Uploaded Image</span></button>
+                </div>
+            </div>
+
+            <div class="col text-center">
+                <input class="btn btn-success" type='submit' value="Predict image" />
+            </div>
+
+        </div>
+
+    </form>
+
+    {% if prediction %}
+    <div class="text-center">
+
+
+        <div class="text-center btn btn-{{status}} " role="alert">
+            <h1>
+                {{prediction}}
+            </h1>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script class="jsbin" src="{{url_for('static', filename ='JS/script.js')}}"></script>
+</body>
+
+</html>
