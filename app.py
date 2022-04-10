@@ -17,7 +17,7 @@ app.config['MAX_CONTENT_LENGTH'] = 15 * 1024 * 1024
  
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-model = keras.models.load_model(r'.\FinalRetinopathyModel.h5')
+model = keras.models.load_model(r'FinalRetinopathyModel.h5')
  
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
