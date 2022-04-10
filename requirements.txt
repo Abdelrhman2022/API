@@ -3,7 +3,8 @@ Flask==1.1.2
 keras==2.8.0
 numpy==1.20.3
 gunicorn==19.9.0
-opencv_python==4.5.5.64
+opencv-python-headless==4.2.0.32
 tensorflow-cpu==2.8.0
 Werkzeug==2.0.2
+uwsgi
 
