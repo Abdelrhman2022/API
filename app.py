@@ -105,7 +105,8 @@ def home():
 
     return render_template("index.html", prediction =  p , status = c) 
     @app.after_request
-    def delete(resp):
+    def delete(image_path):
+        print(image_path)
         os.remove(image_path)
 
     
